@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>소통/나눔 에디터</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            teal: '#00B8A9',
+                            tealLight: '#E6FFFA',
+                            text: '#111827',
+                            bg: '#F8F9FA'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tab Styles */
+        .tab-active {
+            color: #111827;
+            border-bottom: 2px solid #00B8A9;
+            font-weight: 700;
+        }
+        .tab-inactive {
+            color: #9CA3AF;
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Full Width Slider */
+        .slider-container {
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+        }
+        .slider-item {
+            scroll-snap-align: center;
+            min-width: 100%; /* Full Width */
+        }
+
+        /* Balance Game Styles */
+        .bal-opt-active {
+            background-color: #00B8A9;
+            color: white;
+            border-color: #00B8A9;
+            box-shadow: 0 4px 6px rgba(0, 184, 169, 0.2);
+        }
+
+        /* Card Active Style */
+        .card-active {
+            border-color: #00B8A9;
+            background-color: #E6FFFA;
+            box-shadow: 0 0 0 1px #00B8A9;
+        }
+
+        .input-focus-ring:focus-within {
+            border-color: #00B8A9;
+            box-shadow: 0 0 0 1px #00B8A9;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex justify-center min-h-screen font-sans text-gray-800">
+
+    <div class="w-full max-w-[480px] bg-white relative flex flex-col h-screen shadow-2xl">
+
+        <header class="h-14 px-5 flex items-center justify-between border-b border-gray-100 bg-white z-10 sticky top-0">
+            <button class="w-8 h-8 flex items-center justify-start text-gray-800">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+            <h1 class="font-bold text-[17px] tracking-tight">이야기 나누기</h1>
+            <div class="w-8"></div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto no-scrollbar pb-32 bg-brand-bg">
+            
+            <div class="flex bg-white border-b border-gray-100 sticky top-0 z-20 shadow-sm">
+                <button onclick="switchTab('balance', this)" class="tab-active flex-1 py-3 text-[14px] transition-colors">⚖️ 밸런스 게임</button>
+                <button onclick="switchTab('worry', this)" class="tab-inactive flex-1 py-3 text-[14px] transition-colors">🗣️ 고민 상담소</button>
+                <button onclick="switchTab('wisdom', this)" class="tab-inactive flex-1 py-3 text-[14px] transition-colors">💡 생활의 지혜</button>
+            </div>
+
+            <section class="py-6 bg-white border-b border-gray-100 fade-in">
+                <div class="px-5 mb-3 flex justify-between items-end">
+                    <h2 class="text-[16px] font-bold text-gray-900" id="section-title">당신의 선택은?</h2>
+                    <span class="text-[11px] text-gray-400" id="section-desc">하나를 선택해주세요</span>
+                </div>
+                
+                <div class="slider-container flex overflow-x-auto no-scrollbar" id="card-container" onscroll="updateDots()">
+                    </div>
+
+                <div class="flex justify-center gap-1.5 mt-3" id="dots-container">
+                    </div>
+            </section>
+
+            <section class="px-5 py-6 bg-white mb-2 fade-in transition-opacity duration-300" id="editor-section">
+                
+                <div class="flex items-start gap-3 mb-4">
+                    <div class="w-8 h-8 rounded-full bg-brand-teal text-white flex items-center justify-center font-bold text-sm mt-1 shadow-sm shrink-0">Q</div>
+                    
+                    <div id="balance-title-display" class="bg-teal-50 rounded-2xl rounded-tl-none p-3.5 text-[15px] font-bold text-gray-800 leading-snug w-full border border-teal-100 hidden">
+                        <span id="balance-question-text">주제를 선택해주세요.</span>
+                    </div>
+
+                    <div id="lounge-title-input" class="w-full hidden">
+                        <input type="text" id="input-title" 
+                            class="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-[15px] font-bold text-gray-900 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-all placeholder-gray-400"
+                            placeholder="제목을 입력하거나 위 카드를 눌러보세요"
+                            oninput="validateForm()">
+                        <p class="text-[11px] text-gray-400 mt-1.5 ml-1">
+                            * 위 카드를 선택하면 주제가 자동 입력됩니다. (수정 가능)
+                        </p>
+                    </div>
+                </div>
+
+                <div class="input-focus-ring border border-gray-300 rounded-xl p-4 transition-all bg-white relative mb-4">
+                    <textarea 
+                        id="review-text"
+                        class="w-full h-40 resize-none text-[15px] leading-relaxed placeholder-gray-300 focus:outline-none text-gray-700 font-normal"
+                        placeholder="자유롭게 이야기를 나눠보세요."
+                        oninput="checkLength(this)"
+                    ></textarea>
+                    <div class="text-right mt-1">
+                         <span class="text-[12px] text-gray-400 font-medium"><span id="char-count" class="text-brand-teal font-bold">0</span>/1,000</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex gap-3">
+                        <button class="w-20 h-20 rounded-xl bg-gray-50 border border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-brand-teal hover:text-brand-teal transition-colors">
+                            <i class="fa-solid fa-camera text-xl mb-1"></i>
+                            <span class="text-[11px] font-medium">0/3</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="absolute bottom-0 w-full bg-white border-t border-gray-100 p-5 pb-8 z-20 shadow-[0_-5px_30px_rgba(0,0,0,0.04)]">
+            <button id="next-btn" class="w-full py-4 rounded-xl font-bold text-[16px] transition-all bg-gray-200 text-gray-400 cursor-not-allowed" disabled>
+                주제를 먼저 선택해주세요
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DATA (Revised with Hooking Content) ---
+        
+        // 1. Balance Game (재미/선택)
+        const balanceData = [
+            { id: 'b1', title: '100억 받고 10년 늙기? 👴 vs 👶', q: '젊음 vs 돈, 당신의 선택과 그 이유는?', optA: '💰 100억 받기', optB: '✨ 젊음 유지' },
+            { id: 'b2', title: '은퇴 후 살고 싶은 곳은? 🏡 vs 🏙️', q: '선택하신 주거 환경이 더 끌리는 이유는 무엇인가요?', optA: '🌿 전원주택', optB: '🏥 도심 아파트' },
+            { id: 'b3', title: '내 자녀의 배우자감은? ❤️ vs 💰', q: '부모로서 자녀에게 더 바라는 점은 무엇인가요?', optA: '착한데 가난', optB: '못됐는데 부자' }
+        ];
+
+        // 2. Worry Clinic (고민/질문/위로) - "저만 이런가요?"
+        const worryData = [
+            { id: 'w1', icon: '💸', title: '축의금 10만원, 손절각인가요?', sub: '인플레 시대 경조사비 논쟁', q: '친한 친구 자녀 결혼식 축의금, 요즘 얼마가 적당할까요? 제 경험상...' },
+            { id: 'w2', icon: '😤', title: '은퇴 남편과 24시간, 숨 막혀요', sub: '황혼 이혼이 남 일 같지 않다면', q: '삼식이 남편 때문에 스트레스 받는 분들 계신가요? 현명한 대처법 좀 알려주세요.' },
+            { id: 'w3', icon: '🏥', title: '갑자기 온 대상포진, 너무 아파요', sub: '건강 염려와 통증 호소', q: '대상포진 걸려보신 분 계신가요? 통증이 언제쯤 가라앉나요? 위로가 필요합니다.' },
+            { id: 'w4', icon: '🗣️', title: '익명으로 털어놓는 고민', sub: '임금님 귀는 당나귀 귀', q: '가족에게도 말 못 할 고민, 여기서 시원하게 털어놓으세요.' } // Free topic
+        ];
+
+        // 3. Wisdom (정보/자랑/인정) - "이거 아세요?"
+        const wisdomData = [
+            { id: 'k1', icon: '🦴', title: '무릎 수술 없이 관절 지키는 법', sub: '병원 가기 전 필독', q: '제가 직접 효과 본 무릎/관절 관리 비법 공유합니다. (운동, 찜질 등)' },
+            { id: 'k2', icon: '🛒', title: '월 30만원으로 식비 해결하기', sub: '고물가 시대 생존 꿀팁', q: '냉장고 파먹기부터 마트 할인 타임까지, 나만의 식비 절약 노하우를 공개합니다.' },
+            { id: 'k3', icon: '💰', title: '숨은 보험금 찾기, 3분이면 끝', sub: '놓치면 손해보는 금융 팁', q: '모르고 지나칠 뻔한 보험금이나 지원금, 이렇게 찾으세요!' },
+            { id: 'k4', icon: '💡', title: '나만 알기 아까운 생활 팁', sub: '살림/건강/재테크 무엇이든', q: '사소하지만 삶의 질을 올려주는 나만의 꿀팁을 자랑해주세요.' } // Free topic
+        ];
+
+        let currentTab = 'balance';
+        let selectedTopic = null;
+
+        // Init
+        renderCards('balance');
+
+        // --- TABS ---
+        function switchTab(tab, btn) {
+            currentTab = tab;
+            
+            // UI Update
+            document.querySelectorAll('button[onclick^="switchTab"]').forEach(b => b.className = 'tab-inactive flex-1 py-3 text-[14px] transition-colors');
+            btn.className = 'tab-active flex-1 py-3 text-[14px] transition-colors';
+
+            // Text Update (Hooking Text)
+            const titles = { 'balance': '당신의 선택은?', 'worry': '속 시원히 털어놓으세요', 'wisdom': '당신의 지혜를 나눠주세요' };
+            const descs = { 'balance': '하나를 선택해주세요', 'worry': '익명이라 괜찮아요', 'wisdom': '작은 팁도 큰 도움이 됩니다' };
+            document.getElementById('section-title').innerText = titles[tab];
+            document.getElementById('section-desc').innerText = descs[tab];
+
+            // Render
+            renderCards(tab);
+            resetEditorState();
+        }
+
+        // --- RENDER LOGIC ---
+        function renderCards(tab) {
+            const container = document.getElementById('card-container');
+            let html = '';
+            
+            let data;
+            if (tab === 'balance') data = balanceData;
+            else if (tab === 'worry') data = worryData;
+            else data = wisdomData;
+
+            data.forEach((item) => {
+                let cardContent = '';
+                
+                if (tab === 'balance') {
+                    cardContent = `
+                        <div class="w-full bg-white border border-gray-200 rounded-2xl p-5 flex flex-col justify-between shadow-sm relative overflow-hidden" id="card-${item.id}">
+                            <div class="text-center mt-1">
+                                <span class="bg-gray-100 text-gray-500 text-[11px] font-bold px-2 py-1 rounded-full">VS 게임</span>
+                                <h3 class="font-bold text-[18px] text-gray-900 mt-3 mb-4 leading-tight">${item.title}</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="selectBalance('${item.id}', '${item.q}', 'A', this)" class="bal-opt-btn h-32 rounded-xl border border-gray-100 bg-gray-50 flex flex-col items-center justify-center gap-2 hover:bg-teal-50 transition-all active:scale-95" data-opt="A">
+                                    <span class="text-2xl font-bold text-gray-800">${item.optA.split(' ')[0]}</span>
+                                    <span class="text-[13px] font-bold text-gray-600 break-keep px-1 text-center">${item.optA.split(' ').slice(1).join(' ')}</span>
+                                </button>
+                                <button onclick="selectBalance('${item.id}', '${item.q}', 'B', this)" class="bal-opt-btn h-32 rounded-xl border border-gray-100 bg-gray-50 flex flex-col items-center justify-center gap-2 hover:bg-teal-50 transition-all active:scale-95" data-opt="B">
+                                    <span class="text-2xl font-bold text-gray-800">${item.optB.split(' ')[0]}</span>
+                                    <span class="text-[13px] font-bold text-gray-600 break-keep px-1 text-center">${item.optB.split(' ').slice(1).join(' ')}</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    cardContent = `
+                        <div onclick="selectLounge('${item.id}', '${item.q}')" class="w-full bg-white border border-gray-200 rounded-2xl p-8 flex flex-col items-center justify-center text-center shadow-sm cursor-pointer transition-all active:scale-95 lounge-card h-64" id="card-${item.id}">
+                            <div class="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-4xl mb-4">${item.icon}</div>
+                            <h3 class="font-bold text-[18px] text-gray-900 mb-2 leading-snug">${item.title}</h3>
+                            <p class="text-[14px] text-gray-400">${item.sub}</p>
+                            <div class="mt-5 px-4 py-2 rounded-full bg-teal-50 text-brand-teal text-[12px] font-bold opacity-0 transition-opacity check-badge">
+                                <i class="fas fa-check mr-1"></i> 이 주제로 쓰기
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `<div class="slider-item px-5 pb-1">${cardContent}</div>`;
+            });
+
+            container.innerHTML = html;
+            updateDotsHTML(data.length);
+        }
+
+        // --- INTERACTION & EDITOR (Same as before) ---
+        function selectBalance(id, question, option, btn) {
+            selectedTopic = id;
+            const card = document.getElementById(`card-${id}`);
+            card.querySelectorAll('.bal-opt-btn').forEach(b => {
+                b.className = 'bal-opt-btn h-32 rounded-xl border border-gray-100 bg-gray-50 flex flex-col items-center justify-center gap-2 transition-all opacity-50 scale-95';
+                b.querySelector('span').classList.remove('text-white');
+            });
+            btn.className = 'bal-opt-btn h-32 rounded-xl bal-opt-active flex flex-col items-center justify-center gap-2 transition-all scale-100 shadow-lg';
+            btn.querySelectorAll('span').forEach(s => s.classList.add('text-white'));
+            
+            const choiceText = btn.innerText.replace(/\n/g, ' ');
+            const finalQ = `Q. '${choiceText}'을(를) 선택하셨네요. ${question}`;
+            setupEditor('balance', finalQ);
+        }
+
+        function selectLounge(id, title) {
+            selectedTopic = id;
+            document.querySelectorAll('.lounge-card').forEach(c => {
+                c.classList.remove('card-active');
+                c.querySelector('.check-badge').classList.add('opacity-0');
+            });
+            const card = document.getElementById(`card-${id}`);
+            card.classList.add('card-active');
+            card.querySelector('.check-badge').classList.remove('opacity-0');
+            setupEditor('lounge', title);
+        }
+
+        function setupEditor(mode, content) {
+            const balanceDisplay = document.getElementById('balance-title-display');
+            const loungeInputDiv = document.getElementById('lounge-title-input');
+            const loungeInput = document.getElementById('input-title');
+            const qText = document.getElementById('balance-question-text');
+
+            if (mode === 'balance') {
+                balanceDisplay.classList.remove('hidden');
+                loungeInputDiv.classList.add('hidden');
+                qText.innerText = content;
+                document.getElementById('review-text').placeholder = "이유나 경험, 고민을 자유롭게 적어주세요.";
+            } else {
+                balanceDisplay.classList.add('hidden');
+                loungeInputDiv.classList.remove('hidden');
+                loungeInput.value = content; 
+                document.getElementById('review-text').placeholder = "여러분의 이야기를 들려주세요. (최소 10자)";
+                setTimeout(() => loungeInput.scrollIntoView({behavior: 'smooth', block: 'center'}), 300);
+            }
+            validateForm();
+        }
+
+        function resetEditorState() {
+            selectedTopic = null;
+            document.getElementById('review-text').value = '';
+            document.getElementById('input-title').value = '';
+            document.getElementById('char-count').innerText = '0';
+            const balanceDisplay = document.getElementById('balance-title-display');
+            const loungeInputDiv = document.getElementById('lounge-title-input');
+            
+            if (currentTab === 'balance') {
+                balanceDisplay.classList.remove('hidden');
+                loungeInputDiv.classList.add('hidden');
+                document.getElementById('balance-question-text').innerText = "주제를 선택해주세요.";
+            } else {
+                balanceDisplay.classList.add('hidden');
+                loungeInputDiv.classList.remove('hidden');
+            }
+            validateForm();
+        }
+
+        function updateDotsHTML(count) {
+            const dotsContainer = document.getElementById('dots-container');
+            let html = '';
+            for(let i=0; i<count; i++) {
+                html += `<div class="w-1.5 h-1.5 rounded-full transition-colors ${i===0 ? 'bg-brand-teal w-3' : 'bg-gray-300'}" id="dot-${i}"></div>`;
+            }
+            dotsContainer.innerHTML = html;
+        }
+
+        function updateDots() {
+            const container = document.getElementById('card-container');
+            const scrollLeft = container.scrollLeft;
+            const width = container.offsetWidth;
+            const index = Math.round(scrollLeft / width);
+            const dots = document.querySelectorAll('[id^="dot-"]');
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.remove('bg-gray-300');
+                    dot.classList.add('bg-brand-teal', 'w-3');
+                } else {
+                    dot.classList.remove('bg-brand-teal', 'w-3');
+                    dot.classList.add('bg-gray-300');
+                }
+            });
+        }
+
+        function checkLength(el) {
+            document.getElementById('char-count').innerText = el.value.length;
+            validateForm();
+        }
+
+        function validateForm() {
+            const hasText = document.getElementById('review-text').value.length >= 10;
+            const nextBtn = document.getElementById('next-btn');
+            let isValid = false;
+
+            if (currentTab === 'balance') {
+                isValid = selectedTopic && hasText;
+            } else {
+                const hasTitle = document.getElementById('input-title').value.trim().length > 0;
+                isValid = hasTitle && hasText;
+            }
+
+            if (isValid) {
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
+                nextBtn.classList.add('bg-brand-teal', 'text-white', 'cursor-pointer', 'shadow-lg');
+                if (currentTab === 'balance') nextBtn.innerText = "투표하고 이유 남기기";
+                else nextBtn.innerText = "이야기 공유하기";
+                nextBtn.style.backgroundColor = '#00B8A9'; 
+            } else {
+                nextBtn.disabled = true;
+                nextBtn.classList.add('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
+                nextBtn.classList.remove('bg-brand-teal', 'text-white', 'cursor-pointer', 'shadow-lg');
+                nextBtn.style.backgroundColor = '';
+                if (currentTab === 'balance' && !selectedTopic) nextBtn.innerText = "선택지를 먼저 골라주세요";
+                else if (currentTab !== 'balance' && document.getElementById('input-title').value.trim().length === 0) nextBtn.innerText = "제목을 입력해주세요";
+                else nextBtn.innerText = "내용을 10자 이상 적어주세요";
+            }
+        }
+    </script>
+</body>
+</html>
