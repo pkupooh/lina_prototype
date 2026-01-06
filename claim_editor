@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>치료/극복 이야기 작성</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#0055B8',
+                            orange: '#F97316',
+                            text: '#111827',
+                            bg: '#F8F9FA',
+                            red: '#DC2626' // Negative Alert Color
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chip-active {
+            background-color: #F97316 !important;
+            color: white !important;
+            border-color: #F97316 !important;
+            font-weight: 700 !important;
+            box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
+        }
+
+        .hosp-tag-active {
+            background-color: #FFF7ED;
+            border-color: #F97316;
+            color: #C2410C;
+            font-weight: 700;
+        }
+
+        /* Default Focus Ring */
+        .input-focus-ring:focus-within {
+            border-color: #F97316;
+            box-shadow: 0 0 0 1px #F97316;
+        }
+
+        /* Negative Mode Focus Ring */
+        .input-focus-ring.negative-mode:focus-within {
+            border-color: #DC2626;
+            box-shadow: 0 0 0 1px #DC2626;
+        }
+
+        .guide-btn:active { transform: scale(0.95); }
+
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #F97316;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #F97316;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex justify-center min-h-screen font-sans text-gray-800">
+
+    <div class="w-full max-w-[480px] bg-white relative flex flex-col h-screen shadow-2xl">
+
+        <header class="h-14 px-5 flex items-center justify-between border-b border-gray-100 bg-white z-10 sticky top-0">
+            <button class="w-8 h-8 flex items-center justify-start text-gray-800">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+            <h1 class="font-bold text-[17px] tracking-tight">회복 이야기 작성</h1>
+            <div class="w-8"></div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto no-scrollbar pb-32 bg-brand-bg">
+            
+            <section class="px-5 py-5 bg-white border-b border-gray-100 mb-2">
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-orange-50 border border-orange-100 flex items-center justify-center text-brand-orange flex-shrink-0 shadow-sm">
+                        <i class="fa-solid fa-file-invoice-dollar text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-gray-500 font-bold block mb-0.5 tracking-tight">보험금 지급 항목</span>
+                        <h2 class="font-bold text-gray-900 text-[15px] leading-tight mb-1">치주질환(잇몸) 치료 급여금</h2>
+                        <p class="text-[11px] text-gray-500">지급일 2024.12.10 <span class="mx-1">|</span> <span class="font-bold text-brand-orange">300,000원</span> 지급완료</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="px-5 py-6 bg-white mb-2 text-center fade-in">
+                <label class="block font-bold text-[16px] mb-4" id="rating-title">
+                    청구부터 지급까지 <span class="text-brand-orange">편리</span>하셨나요?
+                </label>
+                <div class="flex justify-center gap-3 mb-3" id="star-container">
+                    <i onclick="setRating(1)" class="fa-solid fa-star text-3xl text-gray-200 cursor-pointer transition-colors hover:scale-110 p-1"></i>
+                    <i onclick="setRating(2)" class="fa-solid fa-star text-3xl text-gray-200 cursor-pointer transition-colors hover:scale-110 p-1"></i>
+                    <i onclick="setRating(3)" class="fa-solid fa-star text-3xl text-gray-200 cursor-pointer transition-colors hover:scale-110 p-1"></i>
+                    <i onclick="setRating(4)" class="fa-solid fa-star text-3xl text-gray-200 cursor-pointer transition-colors hover:scale-110 p-1"></i>
+                    <i onclick="setRating(5)" class="fa-solid fa-star text-3xl text-gray-200 cursor-pointer transition-colors hover:scale-110 p-1"></i>
+                </div>
+                <div class="h-6 flex justify-center items-center">
+                    <span id="rating-text" class="text-[13px] font-bold text-brand-orange bg-orange-50 px-3 py-1 rounded-full opacity-0 transition-all scale-90"></span>
+                </div>
+            </section>
+
+            <section class="px-5 py-6 bg-white mb-2 fade-in transition-all duration-300" id="impact-section" style="animation-delay: 0.1s;">
+                <label class="block font-bold text-[16px] mb-3 leading-snug">
+                    이번 보상이 <span class="text-brand-orange">어떤 도움</span>이 되었나요?
+                    <span class="text-[11px] text-gray-400 font-normal ml-1 block mt-1">(최소 1개 선택)</span>
+                </label>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="toggleChip(this)" class="px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-600 text-[13px] font-medium transition-all hover:bg-orange-50">💸 치료비 전액/일부 해결</button>
+                    <button onclick="toggleChip(this)" class="px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-600 text-[13px] font-medium transition-all hover:bg-orange-50">💊 맘 편히 치료에 집중</button>
+                    <button onclick="toggleChip(this)" class="px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-600 text-[13px] font-medium transition-all hover:bg-orange-50">🛒 생활비/간병비 보탬</button>
+                    <button onclick="toggleChip(this)" class="px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-600 text-[13px] font-medium transition-all hover:bg-orange-50">🏥 재활/후속 치료 활용</button>
+                </div>
+            </section>
+
+            <section class="px-5 py-6 bg-white mb-2 fade-in" style="animation-delay: 0.3s;">
+                <label class="block font-bold text-[16px] mb-1" id="writing-label">
+                    솔직한 이야기를 들려주세요
+                </label>
+                <p class="text-[12px] text-gray-400 mb-4 font-normal" id="writing-sub">비슷한 아픔을 겪는 분들께 큰 힘이 됩니다.</p>
+
+                <div class="flex gap-2 mb-3 overflow-x-auto no-scrollbar pb-2" id="hint-container">
+                    <button onclick="insertGuide('symptom')" class="guide-btn flex-shrink-0 px-3 py-2 bg-rose-50 text-rose-700 text-[12px] font-bold rounded-lg border border-rose-100">🤒 처음 아팠을 때</button>
+                    <button onclick="insertGuide('help')" class="guide-btn flex-shrink-0 px-3 py-2 bg-orange-50 text-brand-orange text-[12px] font-bold rounded-lg border border-orange-100">💰 보험금이 도움된 점</button>
+                    <button onclick="insertGuide('cheer')" class="guide-btn flex-shrink-0 px-3 py-2 bg-teal-50 text-teal-700 text-[12px] font-bold rounded-lg border border-teal-100">💪 힘내라는 한마디</button>
+                </div>
+
+                <div class="input-focus-ring border border-gray-300 rounded-xl p-4 transition-all bg-white relative mb-4" id="editor-box">
+                    <textarea 
+                        id="review-text"
+                        class="w-full h-40 resize-none text-[15px] leading-relaxed placeholder-gray-300 focus:outline-none text-gray-700 font-normal"
+                        placeholder="최소 10자 이상 작성해주세요."
+                        oninput="checkLength(this)"
+                    ></textarea>
+                    <div class="text-right mt-1">
+                         <span class="text-[12px] text-gray-400 font-medium"><span id="char-count" class="text-brand-orange font-bold">0</span>/1,000</span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="text-[13px] font-bold text-gray-800 mb-2">사진 첨부 <span class="text-gray-400 font-normal">(선택)</span></h4>
+                    <div class="flex gap-3">
+                        <button class="w-20 h-20 rounded-xl bg-gray-50 border border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-brand-orange hover:text-brand-orange transition-colors">
+                            <i class="fa-solid fa-camera text-xl mb-1"></i>
+                            <span class="text-[11px] font-medium">0/3</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-3 text-[11px] text-gray-500 leading-relaxed flex gap-2 font-medium">
+                    <i class="fas fa-info-circle text-gray-400 mt-0.5"></i>
+                    <div>
+                        개인정보(주민등록번호 등)가 포함되지 않도록 주의해주세요.<br>
+                        작성된 글은 운영 정책에 따라 심사 후 노출됩니다.
+                    </div>
+                </div>
+            </section>
+
+            <section class="px-5 py-6 bg-white fade-in" style="animation-delay: 0.4s;">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-brand-orange font-bold text-lg">Plus.</span>
+                            <h3 class="font-bold text-[16px] text-gray-900">병원 후기</h3>
+                            <span class="bg-orange-50 text-brand-orange text-[10px] font-bold px-2 py-0.5 rounded-full border border-orange-100">선택</span>
+                        </div>
+                        <p class="text-[12px] text-gray-500 mt-1 font-medium">다녀오신 병원은 어떠셨나요?</p>
+                    </div>
+                    
+                    <div class="relative inline-block w-12 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="toggle" id="hospital-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-200 ease-in-out left-0"/>
+                        <label for="hospital-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-all duration-200 ease-in-out"></label>
+                    </div>
+                </div>
+
+                <div id="hospital-content" class="hidden mt-5 pt-5 border-t border-gray-100 space-y-5 transition-all duration-300">
+                    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 bg-teal-500 text-white text-[10px] font-bold px-3 py-1 rounded-br-lg z-10 shadow-sm">
+                            <i class="fas fa-bolt mr-1"></i> 라이나 서류제로 병원
+                        </div>
+                        <div class="flex items-start gap-3 mt-4 mb-2">
+                            <div class="w-12 h-12 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 text-xl">
+                                <i class="fas fa-hospital-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-[16px]">신촌세브란스병원</h4>
+                                <p class="text-[12px] text-gray-500 mt-0.5 font-medium">서울 서대문구 연세로 50-1</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-[13px] font-bold text-gray-800 mb-2">진료 만족도</p>
+                        <div class="flex gap-2">
+                            <i onclick="rateHospital(1)" class="hosp-star fa-solid fa-star text-2xl text-gray-200 cursor-pointer p-1"></i>
+                            <i onclick="rateHospital(2)" class="hosp-star fa-solid fa-star text-2xl text-gray-200 cursor-pointer p-1"></i>
+                            <i onclick="rateHospital(3)" class="hosp-star fa-solid fa-star text-2xl text-gray-200 cursor-pointer p-1"></i>
+                            <i onclick="rateHospital(4)" class="hosp-star fa-solid fa-star text-2xl text-gray-200 cursor-pointer p-1"></i>
+                            <i onclick="rateHospital(5)" class="hosp-star fa-solid fa-star text-2xl text-gray-200 cursor-pointer p-1"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-[13px] font-bold text-gray-800 block mb-2">좋았던 점 (다중선택)</span>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="toggleHospTag(this)" class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-[11px] text-gray-600 font-medium transition-colors hover:border-orange-300">👨‍⚕️ 꼼꼼한 설명</button>
+                            <button onclick="toggleHospTag(this)" class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-[11px] text-gray-600 font-medium transition-colors hover:border-orange-300">💉 통증 없는 치료</button>
+                            <button onclick="toggleHospTag(this)" class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-[11px] text-gray-600 font-medium transition-colors hover:border-orange-300">🏥 쾌적한 시설</button>
+                            <button onclick="toggleHospTag(this)" class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-[11px] text-gray-600 font-medium transition-colors hover:border-orange-300">⚡ 빠른 서류 발급</button>
+                            <button onclick="toggleHospTag(this)" class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-[11px] text-gray-600 font-medium transition-colors hover:border-orange-300">😊 친절한 응대</button>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-[13px] font-bold text-gray-800 block mb-2">병원 한줄평</span>
+                        <input type="text" 
+                            class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-[13px] font-medium focus:outline-none focus:border-orange-500 transition-colors placeholder-gray-400"
+                            placeholder="의료진, 시설, 대기시간 등 자유롭게 남겨주세요."
+                        >
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="absolute bottom-0 w-full bg-white border-t border-gray-100 p-5 pb-8 z-20 shadow-[0_-5px_30px_rgba(0,0,0,0.04)]">
+            <button id="next-btn" class="w-full py-4 rounded-xl font-bold text-[16px] transition-all bg-gray-200 text-gray-400 cursor-not-allowed" disabled onclick="submitReview()">
+                필수 내용을 입력해주세요
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. Chip Toggle
+        function toggleChip(btn) {
+            btn.classList.toggle('chip-active');
+            btn.classList.toggle('border-transparent');
+            validateForm();
+        }
+
+        // 2. Star Rating with Logic Switching
+        let currentRating = 0;
+        const ratingTexts = ["", "불편했어요 😥", "조금 느렸어요 🐢", "보통이에요 🙂", "빨랐어요! ⚡", "최고에요! 👍"];
+        
+        function setRating(score) {
+            currentRating = score;
+            updateStarUI(score);
+            updateEditorMode(score); // Mode Switch
+            validateForm();
+        }
+
+        function updateStarUI(score) {
+            const stars = document.getElementById('star-container').children;
+            const textLabel = document.getElementById('rating-text');
+            
+            for (let i = 0; i < 5; i++) {
+                if (i < score) {
+                    stars[i].classList.remove('text-gray-200');
+                    stars[i].classList.add('text-yellow-400');
+                } else {
+                    stars[i].classList.remove('text-yellow-400');
+                    stars[i].classList.add('text-gray-200');
+                }
+            }
+            textLabel.innerText = ratingTexts[score];
+            textLabel.classList.remove('opacity-0', 'scale-90');
+            textLabel.classList.add('scale-100');
+        }
+
+        // 3. UI Mode Switching (Positive vs Negative)
+        function updateEditorMode(score) {
+            const isNegative = score <= 2;
+            
+            const impactSection = document.getElementById('impact-section');
+            const writingLabel = document.getElementById('writing-label');
+            const writingSub = document.getElementById('writing-sub');
+            const hintContainer = document.getElementById('hint-container');
+            const editorBox = document.getElementById('editor-box');
+            const reviewText = document.getElementById('review-text');
+
+            if (isNegative) {
+                // [Negative Mode]
+                impactSection.style.display = 'none'; // Hide impact tags
+                
+                writingLabel.innerHTML = `어떤 점이 <span class="text-brand-red">아쉬우셨나요?</span>`;
+                writingSub.innerText = "솔직한 의견을 주시면 담당자가 확인 후 개선하겠습니다.";
+
+                // Negative Hints (Complaint Focus)
+                hintContainer.innerHTML = `
+                    <button onclick="insertGuide('neg_speed')" class="guide-btn flex-shrink-0 px-3 py-2 bg-red-50 text-brand-red text-[12px] font-bold rounded-lg border border-red-100">🐢 지급이 너무 늦어요</button>
+                    <button onclick="insertGuide('neg_amount')" class="guide-btn flex-shrink-0 px-3 py-2 bg-red-50 text-brand-red text-[12px] font-bold rounded-lg border border-red-100">📉 금액이 생각보다 적어요</button>
+                    <button onclick="insertGuide('neg_doc')" class="guide-btn flex-shrink-0 px-3 py-2 bg-red-50 text-brand-red text-[12px] font-bold rounded-lg border border-red-100">📄 서류가 복잡해요</button>
+                `;
+
+                editorBox.classList.add('negative-mode');
+                reviewText.placeholder = "불편하셨던 점을 구체적으로 적어주시면, 빠르게 확인하겠습니다.";
+
+            } else {
+                // [Positive Mode]
+                impactSection.style.display = 'block'; // Show impact tags
+                
+                writingLabel.innerText = "솔직한 이야기를 들려주세요";
+                writingSub.innerText = "비슷한 아픔을 겪는 분들께 큰 힘이 됩니다.";
+
+                hintContainer.innerHTML = `
+                    <button onclick="insertGuide('symptom')" class="guide-btn flex-shrink-0 px-3 py-2 bg-rose-50 text-rose-700 text-[12px] font-bold rounded-lg border border-rose-100">🤒 처음 아팠을 때</button>
+                    <button onclick="insertGuide('help')" class="guide-btn flex-shrink-0 px-3 py-2 bg-orange-50 text-brand-orange text-[12px] font-bold rounded-lg border border-orange-100">💰 보험금이 도움된 점</button>
+                    <button onclick="insertGuide('cheer')" class="guide-btn flex-shrink-0 px-3 py-2 bg-teal-50 text-teal-700 text-[12px] font-bold rounded-lg border border-teal-100">💪 힘내라는 한마디</button>
+                `;
+
+                editorBox.classList.remove('negative-mode');
+                reviewText.placeholder = "최소 10자 이상 작성해주세요.";
+            }
+        }
+
+        // 4. Guide Data
+        const guides = {
+            // Positive
+            'symptom': "처음 증상을 느끼고 병원에 가야겠다고 생각했을 때는,",
+            'help': "지급받은 보험금이 경제적으로 가장 도움이 된 부분은,",
+            'cheer': "비슷한 증상으로 치료를 망설이는 분들에게 해주고 싶은 말은,",
+            // Negative (Care)
+            'neg_speed': "보험금 청구 후 지급까지 기다리는 동안 불편했던 점은,",
+            'neg_amount': "지급된 보험금이 예상보다 적다고 느끼신 이유는,",
+            'neg_doc': "청구 서류를 준비하고 제출하는 과정에서 가장 번거로웠던 점은,"
+        };
+
+        function insertGuide(type) {
+            const textarea = document.getElementById('review-text');
+            const guideText = guides[type];
+            if(textarea.value.trim().length > 0) textarea.value += "\n\n" + guideText + " ";
+            else textarea.value = guideText + " ";
+            textarea.focus();
+            textarea.scrollTop = textarea.scrollHeight;
+            checkLength(textarea);
+        }
+
+        // 5. Hospital Logic
+        const hospToggle = document.getElementById('hospital-toggle');
+        const hospContent = document.getElementById('hospital-content');
+
+        hospToggle.addEventListener('change', function() {
+            if(this.checked) {
+                hospContent.classList.remove('hidden');
+                setTimeout(() => { hospContent.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+            } else {
+                hospContent.classList.add('hidden');
+            }
+        });
+
+        function rateHospital(value) {
+            const stars = document.querySelectorAll('.hosp-star');
+            stars.forEach((star, index) => {
+                if (index < value) {
+                    star.classList.remove('text-gray-200');
+                    star.classList.add('text-yellow-400');
+                } else {
+                    star.classList.remove('text-yellow-400');
+                    star.classList.add('text-gray-200');
+                }
+            });
+        }
+
+        function toggleHospTag(btn) {
+            btn.classList.toggle('hosp-tag-active');
+            btn.classList.toggle('border-transparent');
+        }
+
+        // 6. Validation
+        function checkLength(el) {
+            document.getElementById('char-count').innerText = el.value.length;
+            validateForm();
+        }
+
+        function validateForm() {
+            const hasText = document.getElementById('review-text').value.length >= 10;
+            const isNegative = currentRating > 0 && currentRating <= 2;
+            const hasRating = currentRating > 0;
+            const hasChip = document.querySelector('.chip-active');
+
+            // If Negative, Chip is hidden and not required
+            const isValid = isNegative ? (hasRating && hasText) : (hasRating && hasText && hasChip);
+            
+            const nextBtn = document.getElementById('next-btn');
+
+            if (isValid) {
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
+                
+                if (isNegative) {
+                    nextBtn.classList.add('bg-brand-text', 'text-white', 'cursor-pointer', 'shadow-lg');
+                    nextBtn.innerText = "담당자에게 의견 보내기";
+                } else {
+                    nextBtn.classList.add('bg-brand-orange', 'text-white', 'cursor-pointer', 'shadow-lg');
+                    nextBtn.innerText = "작성 내용 확인하기";
+                }
+            } else {
+                nextBtn.disabled = true;
+                nextBtn.classList.add('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
+                nextBtn.classList.remove('bg-brand-orange', 'bg-brand-text', 'text-white', 'cursor-pointer', 'shadow-lg');
+                nextBtn.innerText = "필수 내용을 입력해주세요";
+            }
+        }
+
+        function submitReview() {
+            if (currentRating <= 2) {
+                alert("[Care Process]\n불편을 드려 죄송합니다.\n담당자에게 의견이 전달되었으며, 확인 후 빠르게 연락드리겠습니다.");
+            } else {
+                alert("미리보기 화면으로 이동합니다.");
+            }
+        }
+    </script>
+</body>
+</html>
