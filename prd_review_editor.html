@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 리뷰 작성</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#0055B8',
+                            light: '#F5F9FF',
+                            text: '#111827',
+                            red: '#DC2626' // For negative feedback highlight
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chip-active {
+            background-color: #0055B8 !important;
+            color: white !important;
+            border-color: #0055B8 !important;
+            font-weight: 600 !important;
+            box-shadow: 0 2px 4px rgba(0, 85, 184, 0.2);
+        }
+
+        .input-focus-ring:focus-within {
+            box-shadow: 0 0 0 2px rgba(0, 85, 184, 0.15);
+            border-color: #0055B8;
+        }
+        
+        /* Negative Mode Style */
+        .input-focus-ring.negative-mode:focus-within {
+            box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.15);
+            border-color: #DC2626;
+        }
+
+        .guide-btn:active { transform: scale(0.95); }
+    </style>
+</head>
+<body class="bg-gray-100 flex justify-center min-h-screen font-sans text-gray-800">
+
+    <div class="w-full max-w-[480px] bg-white relative flex flex-col h-screen shadow-2xl">
+
+        <header class="h-14 px-5 flex items-center justify-between border-b border-gray-100 bg-white z-10 sticky top-0">
+            <button class="w-8 h-8 flex items-center justify-start text-gray-800">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+            <h1 class="font-bold text-[17px] tracking-tight">상품 리뷰 쓰기</h1>
+            <div class="w-8"></div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto no-scrollbar pb-32">
+            
+            <section class="px-5 py-5 bg-gray-50 border-b border-gray-100">
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center text-brand-blue flex-shrink-0 shadow-sm">
+                        <i class="fa-solid fa-gift text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-gray-500 font-bold block mb-0.5 tracking-tight">REVIEW TARGET</span>
+                        <h2 class="font-bold text-gray-900 text-[15px] leading-tight mb-1">(무)THE건강한치아보험V</h2>
+                        <p class="text-[11px] text-gray-400">가입 2년차 · 정상유지 중</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="px-5 py-6 text-center fade-in">
+                <label class="block font-bold text-[16px] mb-4" id="rating-title">
+                    이 상품을 지인에게 <span class="text-brand-blue">추천</span>하시나요?
+                </label>
+                <div class="flex justify-center gap-3 mb-3" id="star-container">
+                    <i onclick="setRating(1)" class="fa-solid fa-star text-3xl text-gray-200 cursor-pointer transition-colors hover:scale-110 p-1"></i>
+                    <i onclick="setRating(2)" class="fa-solid fa-star text-3xl text-gray-200 cursor-pointer transition-colors hover:scale-110 p-1"></i>
+                    <i onclick="setRating(3)" class="fa-solid fa-star text-3xl text-gray-200 cursor-pointer transition-colors hover:scale-110 p-1"></i>
+                    <i onclick="setRating(4)" class="fa-solid fa-star text-3xl text-gray-200 cursor-pointer transition-colors hover:scale-110 p-1"></i>
+                    <i onclick="setRating(5)" class="fa-solid fa-star text-3xl text-gray-200 cursor-pointer transition-colors hover:scale-110 p-1"></i>
+                </div>
+                <div class="h-6 flex justify-center items-center">
+                    <span id="rating-text" class="text-[13px] font-bold text-brand-blue bg-blue-50 px-3 py-1 rounded-full opacity-0 transition-all scale-90"></span>
+                </div>
+            </section>
+
+            <div class="h-2 bg-gray-50"></div>
+
+            <section class="px-5 py-6 fade-in transition-all duration-300" id="charm-section" style="animation-delay: 0.1s;">
+                <label class="block font-bold text-[16px] mb-3 leading-snug">
+                    이 상품의 <span class="text-brand-blue">가장 큰 매력</span>은 무엇인가요?
+                    <span class="text-[11px] text-gray-400 font-normal ml-1 block mt-1">(최소 1개 선택)</span>
+                </label>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="toggleChip(this)" class="px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-600 text-[13px] transition-all hover:bg-gray-50">💰 가성비/보험료</button>
+                    <button onclick="toggleChip(this)" class="px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-600 text-[13px] transition-all hover:bg-gray-50">🛡️ 든든한 보장범위</button>
+                    <button onclick="toggleChip(this)" class="px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-600 text-[13px] transition-all hover:bg-gray-50">🏢 브랜드 신뢰도</button>
+                    <button onclick="toggleChip(this)" class="px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-600 text-[13px] transition-all hover:bg-gray-50">⚡ 간편한 청구/관리</button>
+                    <button onclick="toggleChip(this)" class="px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-600 text-[13px] transition-all hover:bg-gray-50">🎁 부가 혜택/서비스</button>
+                </div>
+            </section>
+
+            <div class="h-2 bg-gray-50" id="charm-divider"></div>
+
+            <section class="px-5 py-6 fade-in" style="animation-delay: 0.3s;">
+                <label class="block font-bold text-[16px] mb-1" id="writing-label">
+                    솔직한 리뷰를 남겨주세요
+                </label>
+                <p class="text-[12px] text-gray-400 mb-4" id="writing-sub">버튼을 누르면 문장이 자동으로 시작돼요!</p>
+
+                <div class="flex gap-2 mb-3 overflow-x-auto no-scrollbar pb-2" id="hint-container">
+                    <button onclick="insertGuide('reason')" class="guide-btn flex-shrink-0 px-3 py-2 bg-blue-50 text-brand-blue text-[12px] font-bold rounded-lg border border-blue-100">💡 결정적 가입이유</button>
+                    <button onclick="insertGuide('price')" class="guide-btn flex-shrink-0 px-3 py-2 bg-blue-50 text-brand-blue text-[12px] font-bold rounded-lg border border-blue-100">💰 가격/보장 평가</button>
+                    <button onclick="insertGuide('recommend')" class="guide-btn flex-shrink-0 px-3 py-2 bg-purple-50 text-purple-700 text-[12px] font-bold rounded-lg border border-purple-100">👍 이런 분께 추천</button>
+                </div>
+
+                <div class="input-focus-ring border border-gray-300 rounded-xl p-4 transition-all bg-white relative" id="editor-box">
+                    <textarea 
+                        id="review-text"
+                        class="w-full h-40 resize-none text-[15px] leading-relaxed placeholder-gray-300 focus:outline-none text-gray-700"
+                        placeholder="최소 10자 이상 작성해주세요."
+                        oninput="checkLength(this)"
+                    ></textarea>
+                    
+                    <div class="flex justify-between items-center mt-3 pt-3 border-t border-gray-100">
+                        <button class="flex items-center gap-1.5 text-gray-500 hover:text-brand-blue transition-colors px-2 py-1 rounded hover:bg-gray-50">
+                            <i class="fa-solid fa-camera text-lg"></i>
+                            <span class="text-[12px] font-medium">사진 첨부 (0/3)</span>
+                        </button>
+                        <span class="text-[12px] text-gray-400"><span id="char-count" class="text-brand-blue font-bold">0</span>/1,000</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="absolute bottom-0 w-full bg-white border-t border-gray-100 p-5 pb-8 z-20 shadow-[0_-5px_30px_rgba(0,0,0,0.04)]">
+            <button id="next-btn" class="w-full py-4 rounded-xl font-bold text-[16px] transition-all bg-gray-200 text-gray-400 cursor-not-allowed" disabled onclick="submitReview()">
+                필수 내용을 입력해주세요
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. Chip Toggle
+        function toggleChip(btn) {
+            btn.classList.toggle('chip-active');
+            btn.classList.toggle('border-transparent');
+            validateForm();
+        }
+
+        // 2. Dynamic Rating Logic (Core Update)
+        let currentRating = 0;
+        const ratingTexts = ["", "비추천해요 😢", "많이 아쉬워요 😓", "보통이에요 🙂", "추천해요! 👍", "강력 추천해요! 💖"];
+        
+        function setRating(score) {
+            currentRating = score;
+            updateStarUI(score);
+            updateEditorMode(score); // Mode Switch Logic
+            validateForm();
+        }
+
+        function updateStarUI(score) {
+            const stars = document.getElementById('star-container').children;
+            const textLabel = document.getElementById('rating-text');
+            
+            for (let i = 0; i < 5; i++) {
+                if (i < score) {
+                    stars[i].classList.remove('text-gray-200');
+                    stars[i].classList.add('text-yellow-400');
+                } else {
+                    stars[i].classList.remove('text-yellow-400');
+                    stars[i].classList.add('text-gray-200');
+                }
+            }
+            textLabel.innerText = ratingTexts[score];
+            textLabel.classList.remove('opacity-0', 'scale-90');
+            textLabel.classList.add('scale-100');
+        }
+
+        // 3. UI Mode Switching (Positive vs Negative)
+        function updateEditorMode(score) {
+            const isNegative = score <= 2;
+            
+            // Section Elements
+            const charmSection = document.getElementById('charm-section');
+            const charmDivider = document.getElementById('charm-divider');
+            const writingLabel = document.getElementById('writing-label');
+            const writingSub = document.getElementById('writing-sub');
+            const hintContainer = document.getElementById('hint-container');
+            const editorBox = document.getElementById('editor-box');
+            const reviewText = document.getElementById('review-text');
+
+            if (isNegative) {
+                // [Negative Mode]
+                // 1. Hide Charm Section
+                charmSection.style.display = 'none';
+                charmDivider.style.display = 'none';
+
+                // 2. Change Labels
+                writingLabel.innerHTML = `어떤 점이 <span class="text-brand-red">아쉬우셨나요?</span>`;
+                writingSub.innerText = "솔직한 의견을 주시면 담당자가 확인 후 개선하겠습니다.";
+
+                // 3. Change Hints (Complaint Keywords)
+                hintContainer.innerHTML = `
+                    <button onclick="insertGuide('neg_process')" class="guide-btn flex-shrink-0 px-3 py-2 bg-red-50 text-brand-red text-[12px] font-bold rounded-lg border border-red-100">😡 절차가 복잡해요</button>
+                    <button onclick="insertGuide('neg_counsel')" class="guide-btn flex-shrink-0 px-3 py-2 bg-red-50 text-brand-red text-[12px] font-bold rounded-lg border border-red-100">😓 상담이 불친절해요</button>
+                    <button onclick="insertGuide('neg_benefit')" class="guide-btn flex-shrink-0 px-3 py-2 bg-red-50 text-brand-red text-[12px] font-bold rounded-lg border border-red-100">📉 보장이 부족해요</button>
+                `;
+
+                // 4. Style Changes
+                editorBox.classList.add('negative-mode');
+                reviewText.placeholder = "불편하셨던 점을 구체적으로 적어주시면, 빠르게 확인하겠습니다.";
+
+            } else {
+                // [Positive Mode] - Restore
+                charmSection.style.display = 'block';
+                charmDivider.style.display = 'block';
+
+                writingLabel.innerText = "솔직한 리뷰를 남겨주세요";
+                writingSub.innerText = "버튼을 누르면 문장이 자동으로 시작돼요!";
+
+                hintContainer.innerHTML = `
+                    <button onclick="insertGuide('reason')" class="guide-btn flex-shrink-0 px-3 py-2 bg-blue-50 text-brand-blue text-[12px] font-bold rounded-lg border border-blue-100">💡 결정적 가입이유</button>
+                    <button onclick="insertGuide('price')" class="guide-btn flex-shrink-0 px-3 py-2 bg-blue-50 text-brand-blue text-[12px] font-bold rounded-lg border border-blue-100">💰 가격/보장 평가</button>
+                    <button onclick="insertGuide('recommend')" class="guide-btn flex-shrink-0 px-3 py-2 bg-purple-50 text-purple-700 text-[12px] font-bold rounded-lg border border-purple-100">👍 이런 분께 추천</button>
+                    <button onclick="insertGuide('health')" class="guide-btn flex-shrink-0 px-3 py-2 bg-purple-50 text-purple-700 text-[12px] font-bold rounded-lg border border-purple-100">💪 건강관리 다짐</button>
+                `;
+
+                editorBox.classList.remove('negative-mode');
+                reviewText.placeholder = "최소 10자 이상 작성해주세요.";
+            }
+        }
+
+        // 4. Guide Text Data
+        const guides = {
+            // Positive
+            'reason': "제가 이 상품을 선택하게 된 결정적인 이유는,",
+            'price': "다른 보험과 비교했을 때 가격이나 보장 구성이,",
+            'recommend': "이 상품은 특히 이런 분들에게 추천하고 싶어요.",
+            'health': "앞으로 건강 관리를 위해 이렇게 노력할 거예요.",
+            // Negative (Care)
+            'neg_process': "가입/청구 절차를 진행하면서 가장 불편했던 점은,",
+            'neg_counsel': "상담 과정에서 아쉬움을 느꼈던 부분은,",
+            'neg_benefit': "생각했던 것보다 보장 내용이 부족하다고 느낀 점은,"
+        };
+
+        function insertGuide(type) {
+            const textarea = document.getElementById('review-text');
+            const guideText = guides[type];
+            
+            if(textarea.value.trim().length > 0) textarea.value += "\n\n" + guideText + " ";
+            else textarea.value = guideText + " ";
+            
+            textarea.focus();
+            textarea.scrollTop = textarea.scrollHeight;
+            checkLength(textarea);
+        }
+
+        // 5. Validation
+        function checkLength(el) {
+            document.getElementById('char-count').innerText = el.value.length;
+            validateForm();
+        }
+
+        function validateForm() {
+            // Logic differs by rating
+            const isNegative = currentRating > 0 && currentRating <= 2;
+            const hasRating = currentRating > 0;
+            const hasText = document.getElementById('review-text').value.length >= 10;
+            const hasChip = document.querySelector('.chip-active');
+            
+            // If Negative, Chip is hidden, so not required
+            const isValid = isNegative ? (hasRating && hasText) : (hasRating && hasText && hasChip);
+            
+            const nextBtn = document.getElementById('next-btn');
+
+            if (isValid) {
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
+                
+                if (isNegative) {
+                    nextBtn.classList.add('bg-brand-text', 'text-white', 'cursor-pointer', 'shadow-lg'); // Dark Button for serious tone
+                    nextBtn.innerText = "담당자에게 의견 보내기";
+                } else {
+                    nextBtn.classList.add('bg-brand-blue', 'text-white', 'cursor-pointer', 'shadow-lg');
+                    nextBtn.innerText = "작성 내용 확인하기";
+                }
+            } else {
+                nextBtn.disabled = true;
+                nextBtn.classList.add('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
+                nextBtn.classList.remove('bg-brand-blue', 'bg-brand-text', 'text-white', 'cursor-pointer', 'shadow-lg');
+                nextBtn.innerText = "필수 내용을 입력해주세요";
+            }
+        }
+
+        // 6. Submit Action (Care Pop-up Placeholder)
+        function submitReview() {
+            if (currentRating <= 2) {
+                alert("[Care Process]\n불편을 드려 죄송합니다.\n작성해주신 의견은 담당자에게 '긴급 접수' 되었습니다.\n\n(실제로는 VoC 접수 프로세스로 연결)");
+            } else {
+                alert("미리보기 화면으로 이동합니다.");
+            }
+        }
+    </script>
+</body>
+</html>
