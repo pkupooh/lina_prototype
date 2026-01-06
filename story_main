@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lina Story Hub - Main</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#0055B8',
+                            orange: '#F97316',
+                            teal: '#00B8A9',
+                            bg: '#F8F9FA'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-up { animation: slideUp 0.3s ease-out forwards; }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .tab-btn.active {
+            color: #111827;
+            font-weight: 800;
+            border-bottom: 2px solid #111827;
+        }
+        .tab-btn {
+            color: #9CA3AF;
+            border-bottom: 2px solid transparent;
+        }
+
+        .chip-btn.active {
+            background-color: #374151;
+            color: white;
+            border-color: #374151;
+            font-weight: 700;
+        }
+
+        .filter-btn-active {
+            background-color: #DBEAFE;
+            color: #0055B8;
+            border-color: #0055B8;
+        }
+
+        .banner-container { scroll-snap-type: x mandatory; scroll-behavior: smooth; }
+        .banner-slide { scroll-snap-align: start; }
+    </style>
+</head>
+<body class="bg-gray-100 flex justify-center min-h-screen font-sans text-gray-800">
+
+    <div class="w-full max-w-[480px] bg-white shadow-2xl relative min-h-screen flex flex-col overflow-hidden">
+
+        <header class="h-14 px-5 flex items-center justify-between bg-white/95 backdrop-blur-md z-30 sticky top-0 border-b border-gray-100">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="location.reload()">
+                <span class="text-brand-blue font-bold text-xl tracking-tight">Story</span>
+            </div>
+            <div class="flex items-center gap-4 text-gray-700">
+                <button aria-label="Search"><i class="fa-solid fa-magnifying-glass text-lg"></i></button>
+                <button aria-label="Profile"><i class="fa-regular fa-user text-lg"></i></button>
+            </div>
+        </header>
+
+        <section class="relative bg-white pt-5 pb-2 overflow-hidden">
+            <div id="main-slider" class="banner-container flex overflow-x-auto w-full px-5 gap-3 no-scrollbar snap-x">
+                
+                <div class="banner-slide flex-shrink-0 w-full rounded-2xl bg-gradient-to-r from-[#003E85] to-[#0055B8] p-6 text-white relative overflow-hidden h-44 flex flex-col justify-center shadow-lg">
+                    <div class="absolute right-[-20px] top-[-20px] opacity-10 text-[120px]"><i class="fa-solid fa-heart-pulse"></i></div>
+                    <span class="inline-block px-2 py-0.5 bg-white/20 rounded text-[10px] font-bold w-fit mb-2 backdrop-blur-sm">12월 라이나 Insight</span>
+                    <h2 class="font-bold text-xl leading-snug mb-1">
+                        이번 달 뇌/심장 보험금<br>
+                        <span class="text-[#00C7E2]">총 842명</span> 지급 완료!
+                    </h2>
+                    <button class="mt-3 bg-white text-brand-blue text-xs font-bold py-2 px-4 rounded-full w-fit shadow-sm">
+                        보상 후기 보기 <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+
+                <div class="banner-slide flex-shrink-0 w-full rounded-2xl bg-gradient-to-r from-teal-600 to-emerald-500 p-6 text-white relative overflow-hidden h-44 flex flex-col justify-center shadow-lg">
+                    <div class="absolute right-[-10px] bottom-[-20px] opacity-20 text-[100px]"><i class="fa-solid fa-comments"></i></div>
+                    <span class="inline-block px-2 py-0.5 bg-white/20 rounded text-[10px] font-bold w-fit mb-2 backdrop-blur-sm">NEW 라운지 오픈</span>
+                    <h2 class="font-bold text-xl leading-snug mb-1">
+                        "축의금 10만원, 손절?"<br>
+                        지금 <span class="text-yellow-300">뜨거운 논쟁</span> 참여하기
+                    </h2>
+                    <button class="mt-3 bg-white text-teal-600 text-xs font-bold py-2 px-4 rounded-full w-fit shadow-sm">
+                        투표하러 가기 <i class="fa-solid fa-check ml-1"></i>
+                    </button>
+                </div>
+
+                <div class="banner-slide flex-shrink-0 w-full rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-500 p-6 text-white relative overflow-hidden h-44 flex flex-col justify-center shadow-lg">
+                    <div class="absolute right-[-10px] bottom-[-30px] opacity-10 text-[100px]"><i class="fa-solid fa-gift"></i></div>
+                    <span class="inline-block px-2 py-0.5 bg-white/20 rounded text-[10px] font-bold w-fit mb-2 backdrop-blur-sm">멤버십 혜택</span>
+                    <h2 class="font-bold text-xl leading-snug mb-1">
+                        소중한 경험 나누고<br>
+                        <span class="text-yellow-300">기부 천사</span> 되어보세요
+                    </h2>
+                    <button class="mt-3 bg-white text-indigo-600 text-xs font-bold py-2 px-4 rounded-full w-fit shadow-sm">
+                        글쓰러 가기 <i class="fa-solid fa-pen ml-1"></i>
+                    </button>
+                </div>
+
+                <div class="banner-slide flex-shrink-0 w-full rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 p-6 text-white relative overflow-hidden h-44 flex flex-col justify-center shadow-lg">
+                    <div class="absolute right-[-20px] top-[10px] opacity-10 text-[120px]"><i class="fa-solid fa-tooth"></i></div>
+                    <span class="inline-block px-2 py-0.5 bg-white/20 rounded text-[10px] font-bold w-fit mb-2 backdrop-blur-sm">2026 덴탈 리포트</span>
+                    <h2 class="font-bold text-xl leading-snug mb-1">
+                        임플란트, 서울에서<br>
+                        <span class="text-yellow-200">어디가 제일 쌀까?</span>
+                    </h2>
+                    <button class="mt-3 bg-white text-orange-600 text-xs font-bold py-2 px-4 rounded-full w-fit shadow-sm">
+                        가격표 확인하기 <i class="fa-solid fa-magnifying-glass ml-1"></i>
+                    </button>
+                </div>
+
+            </div>
+            
+            <div class="flex justify-center gap-1.5 mt-3" id="banner-indicators">
+                <div class="w-4 h-1.5 rounded-full bg-brand-blue transition-all"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-gray-300 transition-all"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-gray-300 transition-all"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-gray-300 transition-all"></div>
+            </div>
+        </section>
+
+        <section class="py-4 bg-white border-b border-gray-100">
+            <div class="flex items-center justify-between px-5 mb-3">
+                <h2 class="font-bold text-gray-900 text-[15px]">🔥 지금 가장 공감받는 후기</h2>
+                <span class="text-[11px] text-gray-400">실시간 집계</span>
+            </div>
+            <div class="flex overflow-x-auto gap-3 px-5 no-scrollbar pb-2">
+                <div class="flex-shrink-0 w-64 bg-white rounded-xl p-4 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.05)] cursor-pointer hover:border-brand-blue transition-colors">
+                    <div class="flex items-center gap-1 mb-2">
+                        <span class="bg-red-50 text-red-500 text-[10px] font-bold px-1.5 py-0.5 rounded">BEST</span>
+                        <span class="text-[10px] text-gray-400">🔥 1,240명이 공감</span>
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-sm mb-1 truncate">암 진단금, 서류 제출 다음날 입금...</h3>
+                    <p class="text-gray-500 text-xs line-clamp-1">경황이 없었는데 정말 큰 힘이 되었습니다.</p>
+                </div>
+                <div class="flex-shrink-0 w-64 bg-white rounded-xl p-4 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.05)] cursor-pointer hover:border-brand-blue transition-colors">
+                    <div class="flex items-center gap-1 mb-2">
+                        <span class="bg-red-50 text-red-500 text-[10px] font-bold px-1.5 py-0.5 rounded">BEST</span>
+                        <span class="text-[10px] text-gray-400">🔥 980명이 공감</span>
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-sm mb-1 truncate">은퇴 후 전원주택 vs 도심 아파트?</h3>
+                    <p class="text-gray-500 text-xs line-clamp-1">평생 도시에서 살았는데 고민이네요.</p>
+                </div>
+                <div class="flex-shrink-0 w-64 bg-white rounded-xl p-4 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.05)] cursor-pointer hover:border-brand-blue transition-colors">
+                    <div class="flex items-center gap-1 mb-2">
+                        <span class="bg-red-50 text-red-500 text-[10px] font-bold px-1.5 py-0.5 rounded">BEST</span>
+                        <span class="text-[10px] text-gray-400">🔥 850명이 공감</span>
+                    </div>
+                    <h3 class="font-bold text-gray-900 text-sm mb-1 truncate">30대 가장, 아이들 위해 종신보험...</h3>
+                    <p class="text-gray-500 text-xs line-clamp-1">가족을 위해 드디어 결심했습니다.</p>
+                </div>
+            </div>
+        </section>
+<section class="py-5 bg-teal-50/50 border-b border-gray-100">
+            <div class="px-5 mb-3 flex items-center justify-between">
+                <h2 class="font-bold text-gray-900 text-[15px] flex items-center gap-2">
+                    <i class="fa-solid fa-scale-balanced text-brand-teal"></i> 밸런스 게임
+                </h2>
+                <span class="text-[11px] text-brand-teal font-medium bg-white px-2 py-0.5 rounded-full shadow-sm border border-teal-100">결과가 궁금하다면? Click!</span>
+            </div>
+
+            <div class="flex overflow-x-auto gap-3 px-5 no-scrollbar snap-x pb-2">
+                
+                <div onclick="openWriteModal()" class="flex-shrink-0 w-[85%] snap-center bg-white rounded-xl p-4 border border-teal-100 shadow-sm relative overflow-hidden cursor-pointer active:scale-95 transition-transform">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-[10px] font-bold text-gray-400">1,240명 참여 중</span>
+                        <i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i>
+                    </div>
+                    <h3 class="font-bold text-[16px] text-gray-900 mb-4 text-center leading-snug">
+                        은퇴 후 살고 싶은 곳은?<br>
+                        <span class="text-sm font-normal text-gray-500 mt-1 block">전원주택 vs 도심 아파트</span>
+                    </h3>
+                    
+                    <div class="relative h-10 w-full rounded-lg overflow-hidden flex font-bold text-white text-xs">
+                        <div class="flex-1 bg-brand-teal flex items-center justify-center relative">
+                            <span>?? %</span>
+                        </div>
+                        <div class="w-[2px] bg-white z-10"></div> <div class="flex-1 bg-gray-400 flex items-center justify-center relative">
+                            <span>?? %</span>
+                        </div>
+                        
+                        <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-gray-800 rounded-full w-6 h-6 flex items-center justify-center text-[10px] font-black shadow-md border border-gray-100">VS</div>
+                    </div>
+                </div>
+
+                <div onclick="openWriteModal()" class="flex-shrink-0 w-[85%] snap-center bg-white rounded-xl p-4 border border-teal-100 shadow-sm relative overflow-hidden cursor-pointer active:scale-95 transition-transform">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-[10px] font-bold text-gray-400">3,500명 참여 중</span>
+                        <i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i>
+                    </div>
+                    <h3 class="font-bold text-[16px] text-gray-900 mb-4 text-center leading-snug">
+                        10억 받고 10년 늙기?<br>
+                        <span class="text-sm font-normal text-gray-500 mt-1 block">현금 10억 vs 젊음 유지</span>
+                    </h3>
+                    
+                    <div class="relative h-10 w-full rounded-lg overflow-hidden flex font-bold text-white text-xs">
+                        <div class="flex-1 bg-brand-teal flex items-center justify-center relative">
+                            <span>?? %</span>
+                        </div>
+                        <div class="w-[2px] bg-white z-10"></div>
+                        <div class="flex-1 bg-gray-400 flex items-center justify-center relative">
+                            <span>?? %</span>
+                        </div>
+                        <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-gray-800 rounded-full w-6 h-6 flex items-center justify-center text-[10px] font-black shadow-md border border-gray-100">VS</div>
+                    </div>
+                </div>
+
+                <div onclick="openWriteModal()" class="flex-shrink-0 w-[85%] snap-center bg-white rounded-xl p-4 border border-teal-100 shadow-sm relative overflow-hidden cursor-pointer active:scale-95 transition-transform">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-[10px] font-bold text-gray-400">890명 참여 중</span>
+                        <i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i>
+                    </div>
+                    <h3 class="font-bold text-[16px] text-gray-900 mb-4 text-center leading-snug">
+                        내 자녀의 배우자감은?<br>
+                        <span class="text-sm font-normal text-gray-500 mt-1 block">착한데 가난 vs 못됐는데 부자</span>
+                    </h3>
+                    
+                    <div class="relative h-10 w-full rounded-lg overflow-hidden flex font-bold text-white text-xs">
+                        <div class="flex-1 bg-brand-teal flex items-center justify-center relative">
+                            <span>?? %</span>
+                        </div>
+                        <div class="w-[2px] bg-white z-10"></div>
+                        <div class="flex-1 bg-gray-400 flex items-center justify-center relative">
+                            <span>?? %</span>
+                        </div>
+                        <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-gray-800 rounded-full w-6 h-6 flex items-center justify-center text-[10px] font-black shadow-md border border-gray-100">VS</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+      
+      
+        <div class="sticky top-14 bg-white z-30 shadow-sm transition-all duration-300">
+            <div class="flex border-b border-gray-100" id="main-tabs">
+                <button onclick="switchTab('recommend', this)" class="tab-btn active flex-1 py-3 text-[14px] transition-colors">추천</button>
+                <button onclick="switchTab('claim', this)" class="tab-btn flex-1 py-3 text-[14px] transition-colors">보상후기</button>
+                <button onclick="switchTab('product', this)" class="tab-btn flex-1 py-3 text-[14px] transition-colors">상품리뷰</button>
+                <button onclick="switchTab('lounge', this)" class="tab-btn flex-1 py-3 text-[14px] transition-colors">라운지</button>
+            </div>
+            
+            <div class="flex items-center gap-2 px-5 py-3 overflow-x-auto no-scrollbar bg-white" id="chip-container">
+                </div>
+        </div>
+
+        <main class="flex-1 bg-brand-bg px-0 pb-24 space-y-3 pt-3 min-h-[600px]" id="feed-container">
+            </main>
+
+        <div class="fixed bottom-6 w-full max-w-[480px] pointer-events-none z-20 flex justify-end pr-5">
+            <button onclick="openWriteModal()" class="pointer-events-auto flex items-center gap-2 bg-brand-blue hover:bg-[#003E85] text-white px-5 py-3.5 rounded-full shadow-lg transition-all transform hover:scale-105 active:scale-95 group">
+                <i class="fa-solid fa-pen-to-square text-lg group-hover:rotate-12 transition-transform"></i>
+                <span class="font-bold text-sm">이야기 쓰기</span>
+            </button>
+        </div>
+
+        <div id="product-filter-modal" class="fixed inset-0 z-50 hidden">
+            <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="closeProductFilter()"></div>
+            <div class="absolute bottom-0 w-full bg-white rounded-t-2xl shadow-2xl flex flex-col max-h-[80vh] slide-up">
+                <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+                    <h3 class="font-bold text-lg text-gray-900">상품 선택</h3>
+                    <button onclick="closeProductFilter()" class="text-gray-400 hover:text-gray-700">
+                        <i class="fa-solid fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="overflow-y-auto p-2" id="product-list-container">
+                    </div>
+                <div class="p-4 border-t border-gray-100 flex gap-3">
+                    <button onclick="resetProductFilter()" class="flex-1 py-3.5 rounded-xl border border-gray-300 text-gray-600 font-bold hover:bg-gray-50">초기화</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- 0. Banner Logic ---
+        const slider = document.getElementById('main-slider');
+        const indicators = document.getElementById('banner-indicators').children;
+        let slideIndex = 0;
+        const totalSlides = 4;
+
+        slider.addEventListener('scroll', () => {
+            const index = Math.round(slider.scrollLeft / slider.offsetWidth);
+            updateIndicators(index);
+        });
+
+        function updateIndicators(index) {
+            for(let i=0; i<indicators.length; i++) {
+                if(i === index) {
+                    indicators[i].classList.remove('bg-gray-300', 'w-1.5');
+                    indicators[i].classList.add('bg-brand-blue', 'w-4');
+                } else {
+                    indicators[i].classList.remove('bg-brand-blue', 'w-4');
+                    indicators[i].classList.add('bg-gray-300', 'w-1.5');
+                }
+            }
+        }
+
+        // --- 1. CONFIG & DATA ---
+        
+        const chipsConfig = {
+            'recommend': [{ id: 'all', label: '🔥 베스트' }, { id: 'cost', label: '💰 병원비_0원' }, { id: 'balance', label: '#VS밸런스' }, { id: 'dental', label: '🦷 치아보험' }, { id: 'worry', label: '#고민상담' }],
+            'claim': [{ id: 'all', label: '전체' }, { id: 'dental', label: '🦷 치아' }, { id: 'cancer', label: '🎗️ 암/중대질병' }, { id: 'brain', label: '🧠 뇌/심장' }, { id: 'dementia', label: '👵 치매/간병' }],
+            'product': [{ id: 'all', label: '전체' }, { id: 'dental', label: '🦷 치아보험' }, { id: 'cancer', label: '🎗️ 암보험' }, { id: 'dementia', label: '👵 치매/간병' }],
+            'lounge': [{ id: 'all', label: '전체' }, { id: 'balance', label: '⚖️ 밸런스게임' }, { id: 'worry', label: '🗣️ 고민상담' }, { id: 'tips', label: '💡 생활지혜' }]
+        };
+
+        const productList = {
+            'dental': ['(무)THE건강한치아보험V', '(무)라이나치아사랑보험', '(무)스마일치아보험'],
+            'cancer': ['(무)라이나암보험', '(무)실버암보험', '(무)집중보장암보험'],
+            'brain': ['(무)라이나뇌심장보험', '(무)건강한뇌심장보장보험'],
+            'dementia': ['(무)전에없던치매보험', '(무)간병비주는치매보험'],
+            'health': ['(무)골라담는건강보험', '(무)수술비보장보험']
+        };
+
+        let feedData = [];
+
+        function generateData() {
+            const getProd = (cat) => productList[cat] ? productList[cat][Math.floor(Math.random() * productList[cat].length)] : '(무)라이나종합보험';
+            const categories = ['dental', 'cancer', 'brain', 'dementia', 'health'];
+            const claimTags = ['cost', 'living', 'rehab', 'speed'];
+
+            categories.forEach(cat => {
+                // Claim Data
+                claimTags.forEach(tag => {
+                    for(let i=0; i<3; i++) {
+                        feedData.push({
+                            type: 'claim', cat: cat, tags: [tag],
+                            title: `${cat.toUpperCase()} 치료 후기 - ${tag} (${i+1})`,
+                            desc: '보험 덕분에 경제적 부담 없이 치료 잘 받았습니다.',
+                            badge: '가입 3년차', star: 5, likes: Math.floor(Math.random()*500),
+                            prodName: getProd(cat)
+                        });
+                    }
+                });
+                // Product Data
+                for(let i=0; i<5; i++) {
+                    feedData.push({
+                        type: 'product', cat: cat, tags: [],
+                        title: `${cat.toUpperCase()} 상품 가입 후기 (${i+1})`,
+                        desc: '상담도 친절하고 보장 내용도 마음에 들어서 가입했습니다.',
+                        badge: '가입 1년차', star: 4 + (i%2), likes: Math.floor(Math.random()*200),
+                        prodName: getProd(cat)
+                    });
+                }
+            });
+            
+            // Lounge & Recommend Items
+            feedData.push({ type: 'lounge', cat: 'balance', tags: ['balance'], title: '은퇴 후 주거지는?', desc: '전원주택 vs 아파트', badge: '참여 1.2k', star: 0, likes: 120 });
+            feedData.push({ type: 'lounge', cat: 'worry', tags: ['worry'], title: '축의금 10만원, 적은가요?', desc: '요즘 물가가 너무 올라서 고민입니다.', badge: '댓글 58', star: 0, likes: 130 });
+            // ... more dummy data assumed ...
+        }
+
+        // --- STATE ---
+        let currentTab = 'recommend';
+        let currentCat = 'all'; 
+        let currentProduct = null;
+
+        // --- RENDER LOGIC ---
+
+        function init() {
+            generateData();
+            switchTab('recommend', document.querySelector('.tab-btn.active'));
+        }
+
+        function switchTab(tab, btn) {
+            currentTab = tab;
+            currentCat = 'all';
+            currentProduct = null;
+            
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+
+            renderChips(tab);
+            renderFeed();
+        }
+
+        function renderChips(tab) {
+            const container = document.getElementById('chip-container');
+            const chips = chipsConfig[tab];
+            let html = '';
+
+            // [Filter Icon] for Claim & Product Tabs (Unified Logic)
+            if (tab === 'claim' || tab === 'product') {
+                const activeClass = currentProduct ? 'filter-btn-active' : 'bg-gray-100 border-transparent text-gray-500';
+                html += `
+                    <button onclick="openProductFilter()" class="flex-shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-all mr-1 ${activeClass}">
+                        <i class="fa-solid fa-sliders text-xs"></i>
+                    </button>
+                `;
+            }
+            
+            html += chips.map((chip, idx) => `
+                <button onclick="filterCat('${chip.id}', this)" 
+                    class="chip-btn flex-shrink-0 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-[13px] font-medium text-gray-500 transition-all ${idx === 0 ? 'active' : ''}">
+                    ${chip.label}
+                </button>
+            `).join('');
+            
+            container.innerHTML = html;
+        }
+
+        function filterCat(id, btn) {
+            currentCat = id;
+            currentProduct = null;
+            
+            const siblings = btn.parentElement.querySelectorAll('.chip-btn');
+            siblings.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if(currentTab === 'product' || currentTab === 'claim') {
+                 const filterBtn = btn.parentElement.querySelector('button:first-child');
+                 if(filterBtn.innerHTML.includes('fa-sliders')) {
+                     filterBtn.classList.remove('filter-btn-active');
+                     filterBtn.classList.add('bg-gray-100', 'border-transparent', 'text-gray-500');
+                 }
+            }
+
+            renderFeed();
+        }
+
+        // --- PRODUCT FILTER MODAL ---
+        function openProductFilter() {
+            const modal = document.getElementById('product-filter-modal');
+            const listContainer = document.getElementById('product-list-container');
+            let listHtml = '';
+            
+            const groups = {
+                'dental': '치아보험', 'cancer': '암보험', 'brain': '뇌/심장', 
+                'dementia': '치매/간병', 'health': '건강/수술'
+            };
+
+            Object.keys(groups).forEach(key => {
+                const prods = productList[key];
+                if(prods) {
+                    listHtml += `<div class="px-4 py-2 bg-gray-50 font-bold text-xs text-gray-500 mt-2 first:mt-0">${groups[key]}</div>`;
+                    prods.forEach(p => {
+                        const isSelected = currentProduct === p ? 'text-brand-blue font-bold bg-blue-50' : 'text-gray-700 hover:bg-gray-50';
+                        listHtml += `
+                            <div onclick="selectProduct('${p}')" class="px-6 py-4 border-b border-gray-100 cursor-pointer flex justify-between items-center ${isSelected}">
+                                <span>${p}</span>
+                                ${currentProduct === p ? '<i class="fa-solid fa-check"></i>' : ''}
+                            </div>
+                        `;
+                    });
+                }
+            });
+
+            listContainer.innerHTML = listHtml;
+            modal.classList.remove('hidden');
+        }
+
+        function closeProductFilter() {
+            document.getElementById('product-filter-modal').classList.add('hidden');
+        }
+
+        function selectProduct(prodName) {
+            currentProduct = prodName;
+            currentCat = 'all';
+            closeProductFilter();
+            renderChips(currentTab);
+            renderFeed();
+        }
+
+        function resetProductFilter() {
+            currentProduct = null;
+            closeProductFilter();
+            renderChips(currentTab);
+            renderFeed();
+        }
+
+        // --- FEED RENDER ---
+        function renderFeed() {
+            const container = document.getElementById('feed-container');
+            let filtered = [];
+
+            if (currentTab === 'recommend') {
+                if (currentCat === 'all') filtered = feedData.slice().sort((a, b) => b.likes - a.likes).slice(0, 15);
+                else filtered = feedData.filter(item => item.tags.includes(currentCat) || item.cat === currentCat);
+            } else {
+                filtered = feedData.filter(item => item.type === currentTab);
+
+                if (currentProduct) {
+                    filtered = filtered.filter(item => item.prodName === currentProduct);
+                } else if (currentCat !== 'all') {
+                    filtered = filtered.filter(item => item.cat === currentCat);
+                }
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="py-12 text-center text-gray-400 text-sm">조건에 맞는 이야기가 없습니다.</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(item => getCardHTML(item)).join('');
+        }
+
+        function getCardHTML(item) {
+            let headerIcon, headerText, headerColor, headerBg;
+            
+            if (item.type === 'claim') {
+                headerIcon = 'fa-file-invoice-dollar';
+                headerText = '보상후기';
+                headerColor = 'text-brand-orange';
+                headerBg = 'bg-orange-50';
+            } else if (item.type === 'product') {
+                headerIcon = 'fa-shield-halved';
+                headerText = '상품리뷰';
+                headerColor = 'text-brand-blue';
+                headerBg = 'bg-blue-50';
+            } else {
+                headerIcon = item.cat === 'balance' ? 'fa-scale-balanced' : 'fa-comments';
+                headerText = item.cat === 'balance' ? '밸런스게임' : '고민상담';
+                headerColor = 'text-brand-teal';
+                headerBg = 'bg-[#E6FFFA]';
+            }
+
+            // Right Metric: Unified Star UI for Claim/Product, Badge for Lounge
+            let rightMetric = '';
+            if (item.type === 'lounge') {
+                rightMetric = `<span class="text-[11px] font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">${item.badge}</span>`;
+            } else {
+                rightMetric = `<div class="flex text-yellow-400 text-xs gap-0.5">${'<i class="fa-solid fa-star"></i>'.repeat(item.star)}</div>`;
+            }
+
+            // Sub-header (Product Name)
+            let subHeader = '';
+            if (item.prodName) {
+                subHeader = `<div class="text-[11px] text-gray-400 mb-1 flex items-center gap-1"><i class="fa-solid fa-gift"></i> ${item.prodName}</div>`;
+            }
+
+            return `
+                <article class="bg-white p-5 border-b border-gray-100 last:border-0 shadow-sm animate-[fadeIn_0.5s_ease-out]">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded ${headerBg} ${headerColor} text-[10px] font-bold">
+                            <i class="fa-solid ${headerIcon}"></i> ${headerText}
+                        </span>
+                        ${rightMetric}
+                    </div>
+
+                    ${subHeader}
+                    ${item.type !== 'lounge' ? `<div class="text-[11px] text-gray-400 mb-1 font-medium tracking-tight">${item.badge}</div>` : ''}
+
+                    <h3 class="font-bold text-gray-900 text-[16px] mb-1.5 leading-tight cursor-pointer hover:underline decoration-gray-300 underline-offset-4 line-clamp-1">${item.title}</h3>
+                    <p class="text-gray-600 text-[13px] leading-relaxed line-clamp-2 mb-3 font-normal">${item.desc}</p>
+
+                    <div class="flex items-center justify-between text-gray-400 text-[11px] pt-3 border-t border-gray-50">
+                        <div class="flex gap-3">
+                            <span class="flex items-center gap-1"><i class="fa-regular fa-heart"></i> ${item.likes}</span>
+                            <span class="flex items-center gap-1"><i class="fa-regular fa-comment-dots"></i> 12</span>
+                        </div>
+                        <span class="text-gray-300">2시간 전</span>
+                    </div>
+                </article>
+            `;
+        }
+
+        function openWriteModal() {
+            alert('작성 대상 선택 화면(SC-03)으로 이동합니다.');
+        }
+
+        init();
+    </script>
+</body>
+</html>
