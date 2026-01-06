@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>치료/극복 이야기 상세</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#0055B8',
+                            orange: '#F97316',
+                            text: '#111827',
+                            bg: '#F8F9FA'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex justify-center min-h-screen font-sans text-gray-800">
+
+    <div class="w-full max-w-[480px] bg-white shadow-2xl relative flex flex-col min-h-screen">
+
+        <header class="sticky top-0 bg-white/95 backdrop-blur-md z-20 border-b border-gray-100 flex items-center justify-between px-4 h-14">
+            <button class="w-10 h-10 flex items-center justify-center text-gray-800 hover:bg-gray-50 rounded-full transition-colors" onclick="history.back()">
+                <i class="fas fa-arrow-left text-lg"></i>
+            </button>
+            <h1 class="text-[16px] font-bold text-gray-900">이야기 상세</h1>
+            <button class="w-10 h-10 flex items-center justify-center text-gray-800 hover:bg-gray-50 rounded-full transition-colors">
+                <i class="fas fa-share-nodes text-lg"></i>
+            </button>
+        </header>
+
+        <main class="overflow-y-auto pb-32">
+
+            <section class="px-5 pt-6 pb-2 fade-in">
+                <div class="flex items-center justify-between mb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" class="w-11 h-11 rounded-full border border-gray-100 bg-gray-50 object-cover">
+                            <span class="absolute -bottom-1 -right-1 bg-brand-orange text-white text-[8px] p-1 rounded-full border-2 border-white shadow-sm" title="보상완료"><i class="fas fa-check-double"></i></span>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-1.5">
+                                <h2 class="text-[15px] font-bold text-gray-900">이*훈 님</h2>
+                                <span class="text-[11px] text-gray-400">· 3시간 전</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-[12px] text-gray-500 mt-0.5">
+                                <span class="bg-gray-100 px-1.5 py-0.5 rounded text-gray-600 font-medium">40대 남성</span>
+                                <span class="w-px h-2.5 bg-gray-300"></span>
+                                <span class="text-brand-orange font-bold">가입 5년차</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="text-gray-300 hover:text-gray-600"><i class="fas fa-ellipsis-v"></i></button>
+                </div>
+
+                <div class="bg-white border border-orange-100 rounded-xl p-4 shadow-sm flex items-center justify-between cursor-pointer hover:border-orange-200 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-orange-50 text-brand-orange flex items-center justify-center text-lg">
+                            <i class="fas fa-tooth"></i> </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold mb-0.5">지급 받은 내역</p>
+                            <h4 class="text-[14px] font-bold text-gray-900 leading-tight">임플란트 치료 급여금</h4>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="block text-[14px] font-bold text-brand-orange">300,000원</span>
+                        <span class="text-[10px] text-gray-400">지급완료</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="px-5 mb-5 fade-in" style="animation-delay: 0.1s;">
+                <div class="flex items-center gap-1 mb-3 mt-4">
+                    <span class="text-[12px] text-gray-500 font-medium mr-1">지급 만족도</span>
+                    <div class="flex text-yellow-400 text-sm">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <span class="text-[12px] text-brand-orange font-bold ml-1">"매우 빨라요! ⚡"</span>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-orange-50 text-brand-orange text-[12px] font-bold border border-orange-100">
+                        💸 치료비 부담 싹 해결
+                    </span>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-gray-50 text-gray-600 text-[12px] font-medium border border-gray-100">
+                        🏥 재활 비용 활용
+                    </span>
+                </div>
+            </section>
+
+            <section class="px-5 fade-in" style="animation-delay: 0.2s;">
+                <div class="text-[15px] leading-[1.7] text-gray-700 whitespace-pre-line break-words">
+                    <span class="font-bold text-gray-900 block mb-2 text-lg">"임플란트 3개, 비용 걱정 없이 치료받았습니다"</span>
+                    
+                    치과 공포증보다 더 무서운 게 비용이었는데, 미리 가입해둔 덕분에 큰 부담 없이 치료를 마쳤어요. 
+
+                    <span class="bg-orange-50 px-1 font-medium text-gray-900">지급받은 보험금이 경제적으로 가장 도움이 된 부분은,</span>
+                    사실 임플란트가 한두 푼 하는 게 아니라서 생활비를 쪼개 써야 하나 걱정이 많았습니다. 그런데 청구하고 바로 다음 날 입금 알림이 떠서 정말 깜짝 놀랐어요. 덕분에 생활비 축내지 않고 치료비 전액을 해결했습니다.
+
+                    <span class="text-brand-orange font-bold">비슷한 증상으로 치료를 망설이는 분들에게,</span>
+                    아프면 참지 말고 병원 가세요. 돈 걱정 때문에 병 키우지 마시고, 든든한 보험 하나 있으면 정말 마음이 편합니다.
+                </div>
+
+                <div class="flex gap-2 mt-6 overflow-x-auto no-scrollbar pb-1">
+                    <div class="flex-shrink-0 w-32 h-32 rounded-xl bg-gray-100 overflow-hidden border border-gray-100 relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                        <span class="absolute bottom-1 right-1 bg-black/50 text-white text-[9px] px-1.5 py-0.5 rounded backdrop-blur-sm">진료 영수증</span>
+                    </div>
+                    <div class="flex-shrink-0 w-32 h-32 rounded-xl bg-gray-100 overflow-hidden border border-gray-100 relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                    </div>
+                </div>
+
+                <div class="mt-4 text-[11px] text-gray-400 border-b border-gray-100 pb-5 flex justify-between">
+                    <span>2023.11.15 작성</span>
+                    <span>조회 3,420회</span>
+                </div>
+            </section>
+
+            <section class="px-5 py-4 flex items-center justify-center fade-in" style="animation-delay: 0.3s;">
+                <button class="flex items-center gap-2 px-6 py-2.5 rounded-full border border-gray-200 bg-white text-gray-600 hover:bg-orange-50 hover:text-brand-orange hover:border-orange-200 transition-all shadow-sm active:scale-95 group">
+                    <i class="far fa-heart text-lg group-hover:animate-pulse"></i>
+                    <span class="text-[14px] font-medium">응원해요</span>
+                    <span class="text-[14px] font-bold ml-1">158</span>
+                </button>
+            </section>
+
+            <section class="px-5 py-6 bg-orange-50/30 border-t border-b border-orange-50">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="text-brand-orange font-bold text-lg">Plus.</span>
+                    <h3 class="font-bold text-[15px] text-gray-900">다녀온 병원은 어땠나요?</h3>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-orange-100 shadow-sm p-5 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 bg-teal-500 text-white text-[9px] font-bold px-2 py-1 rounded-br-lg z-10">
+                        <i class="fas fa-bolt mr-1"></i> 서류제로 병원
+                    </div>
+
+                    <div class="flex items-start gap-3 mt-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 text-lg">
+                            <i class="fas fa-hospital-alt"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 text-[15px]">서울대학교 치과병원</h4>
+                            <p class="text-[11px] text-gray-500 mt-0.5">서울 종로구 대학로 101</p>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-100 pt-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[12px] font-medium text-gray-600">진료 만족도</span>
+                            <div class="flex text-yellow-400 text-xs">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="text-[13px] text-gray-700 bg-gray-50 p-3 rounded-xl leading-relaxed">
+                            "대학병원이라 대기는 좀 길었지만, 교수님이 정말 꼼꼼하게 봐주셨어요. 과잉 진료 없어서 믿음이 갔습니다."
+                        </p>
+                        <div class="flex gap-1.5 mt-2 flex-wrap">
+                            <span class="text-[10px] text-gray-500 bg-white border border-gray-200 px-2 py-1 rounded-md">👨‍⚕️ 꼼꼼한 설명</span>
+                            <span class="text-[10px] text-gray-500 bg-white border border-gray-200 px-2 py-1 rounded-md">🏥 쾌적한 시설</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="px-5 py-8 pb-10">
+                <h3 class="text-[14px] font-bold text-gray-900 mb-3">치아 치료 받은 분들의 다른 이야기</h3>
+                <div class="space-y-3">
+                    <div class="bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-gray-100 transition-colors border border-transparent hover:border-gray-200">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-white border border-gray-200 text-[10px] px-1.5 py-0.5 rounded text-gray-500">크라운 치료</span>
+                            <span class="text-[10px] text-brand-orange font-bold">15만원 지급</span>
+                        </div>
+                        <p class="text-[13px] font-medium text-gray-800 line-clamp-1">"직장인 치과 치료, 점심시간 이용해서 다녀왔어요"</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-gray-100 transition-colors border border-transparent hover:border-gray-200">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-white border border-gray-200 text-[10px] px-1.5 py-0.5 rounded text-gray-500">브릿지</span>
+                            <span class="text-[10px] text-brand-orange font-bold">80만원 지급</span>
+                        </div>
+                        <p class="text-[13px] font-medium text-gray-800 line-clamp-1">"부모님 해드린 치아보험, 효도 제대로 했습니다"</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <div class="fixed bottom-0 w-full max-w-[480px] bg-white border-t border-gray-100 p-5 pb-8 z-30 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+            <div class="flex justify-between items-center mb-3 px-1">
+                <span class="text-[12px] text-gray-500 font-medium">이 분이 보장받은 상품</span>
+                <span class="text-[13px] font-bold text-gray-900 border-b border-gray-300">(무)THE건강한치아보험V</span>
+            </div>
+            <button class="w-full bg-gray-900 text-white font-bold text-[16px] py-4 rounded-xl shadow-lg hover:bg-gray-800 transition-transform active:scale-[0.98] flex justify-center items-center gap-2">
+                내 예상 보장금액 확인하기 <i class="fas fa-arrow-right text-[12px]"></i>
+            </button>
+        </div>
+
+    </div>
+
+</body>
+</html>
