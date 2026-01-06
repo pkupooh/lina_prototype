@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>밸런스 게임 상세</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            teal: '#00B8A9',
+                            tealLight: '#E6FFFA',
+                            orange: '#F97316',
+                            orangeLight: '#FFF7ED',
+                            text: '#111827',
+                            bg: '#F8F9FA'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Progress Bar Animation */
+        .bar-animate { animation: expandWidth 1s ease-out forwards; }
+        @keyframes expandWidth {
+            from { width: 0%; }
+        }
+
+        /* Tab Active Styles */
+        .filter-active {
+            background-color: #111827;
+            color: white;
+            border-color: #111827;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex justify-center min-h-screen font-sans text-gray-800">
+
+    <div class="w-full max-w-[480px] bg-white shadow-2xl relative flex flex-col min-h-screen">
+
+        <header class="sticky top-0 bg-white/95 backdrop-blur-md z-30 border-b border-gray-100 flex items-center justify-between px-4 h-14">
+            <button class="w-10 h-10 flex items-center justify-center text-gray-800 hover:bg-gray-50 rounded-full transition-colors" onclick="history.back()">
+                <i class="fas fa-arrow-left text-lg"></i>
+            </button>
+            <h1 class="text-[16px] font-bold text-gray-900">밸런스 게임</h1>
+            <button class="w-10 h-10 flex items-center justify-center text-gray-800 hover:bg-gray-50 rounded-full transition-colors">
+                <i class="fas fa-share-nodes text-lg"></i>
+            </button>
+        </header>
+
+        <main class="overflow-y-auto pb-24">
+
+            <section class="px-5 pt-8 pb-6 bg-white text-center">
+                <span class="inline-block px-2.5 py-1 bg-gray-100 text-gray-500 text-[11px] font-bold rounded-full mb-3">🔥 3,542명 참여 중</span>
+                <h2 class="text-[22px] font-bold text-gray-900 leading-tight mb-6">
+                    은퇴 후 살고 싶은 곳은?<br>
+                    <span class="text-brand-teal">전원주택</span> vs <span class="text-brand-orange">도심 아파트</span>
+                </h2>
+
+                <div class="relative w-full h-16 rounded-2xl overflow-hidden flex shadow-inner bg-gray-100 mb-4">
+                    <div class="h-full bg-brand-teal flex items-center justify-start pl-4 text-white relative bar-animate" style="width: 35%;">
+                        <div class="z-10 text-left leading-tight">
+                            <span class="text-[10px] opacity-80 font-medium block">A. 전원주택</span>
+                            <span class="text-[18px] font-black">35%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="absolute inset-y-0 left-[35%] w-1 bg-white z-20 skew-x-[-15deg] scale-y-110 origin-bottom"></div>
+
+                    <div class="h-full bg-brand-orange flex-1 flex items-center justify-end pr-4 text-white">
+                        <div class="text-right leading-tight">
+                            <span class="text-[10px] opacity-80 font-medium block">B. 도심 아파트</span>
+                            <span class="text-[18px] font-black">65%</span>
+                        </div>
+                    </div>
+
+                    <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-gray-900 w-9 h-9 rounded-full flex items-center justify-center font-black text-[11px] shadow-lg border-2 border-gray-50 z-30">VS</div>
+                </div>
+
+         
+            </section>
+
+            <div class="h-2 bg-brand-bg border-t border-b border-gray-100"></div>
+
+            <section class="sticky top-14 bg-white z-20 border-b border-gray-100">
+                <div class="flex px-5 py-3 gap-2 overflow-x-auto no-scrollbar">
+                    <button onclick="filterComments('all', this)" class="filter-btn filter-active px-4 py-2 rounded-full border border-gray-200 text-[13px] font-bold transition-all whitespace-nowrap">전체보기</button>
+                    <button onclick="filterComments('A', this)" class="filter-btn bg-white text-gray-500 px-4 py-2 rounded-full border border-gray-200 text-[13px] font-medium transition-all whitespace-nowrap hover:text-brand-teal hover:border-brand-teal">
+                        <span class="w-2 h-2 rounded-full bg-brand-teal inline-block mr-1"></span>전원주택 파
+                    </button>
+                    <button onclick="filterComments('B', this)" class="filter-btn bg-white text-gray-500 px-4 py-2 rounded-full border border-gray-200 text-[13px] font-medium transition-all whitespace-nowrap hover:text-brand-orange hover:border-brand-orange">
+                        <span class="w-2 h-2 rounded-full bg-brand-orange inline-block mr-1"></span>도심아파트 파
+                    </button>
+                </div>
+            </section>
+
+            <section class="px-5 py-4 space-y-4 min-h-[400px]" id="comment-list">
+                
+                <div class="comment-item group-A flex gap-3 fade-in">
+                    <div class="flex-shrink-0">
+                        <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" class="w-9 h-9 rounded-full bg-gray-100 border border-gray-100">
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[13px] font-bold text-gray-900">박*수 님</span>
+                            <span class="text-[10px] text-gray-400">2분 전</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-teal-50 text-brand-teal border border-teal-100">
+                                <i class="fas fa-check mr-1"></i> 전원주택 선택
+                            </span>
+                        </div>
+                        <p class="text-[14px] text-gray-700 leading-relaxed">
+                            평생 서울 매연 마시며 일했는데, 은퇴하고 나서는 흙 밟으면서 살고 싶어요. 작은 텃밭 가꾸는 게 로망입니다.
+                        </p>
+                        <div class="flex gap-4 mt-2 text-gray-400 text-[12px]">
+                            <button class="hover:text-gray-600"><i class="far fa-heart mr-1"></i> 12</button>
+                            <button class="hover:text-gray-600"><i class="far fa-comment mr-1"></i> 2</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="h-px bg-gray-50"></div>
+
+                <div class="comment-item group-B flex gap-3 fade-in">
+                    <div class="flex-shrink-0">
+                        <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Annie" class="w-9 h-9 rounded-full bg-gray-100 border border-gray-100">
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[13px] font-bold text-gray-900">김*영 님</span>
+                            <span class="text-[10px] text-gray-400">15분 전</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-orange-50 text-brand-orange border border-orange-100">
+                                <i class="fas fa-check mr-1"></i> 도심 아파트 선택
+                            </span>
+                        </div>
+                        <p class="text-[14px] text-gray-700 leading-relaxed">
+                            나이 들수록 병원 가까운 게 최고입니다. 전원주택 관리는 체력적으로도 힘들고요. 인프라 좋은 곳이 짱!
+                        </p>
+                        <div class="flex gap-4 mt-2 text-gray-400 text-[12px]">
+                            <button class="hover:text-gray-600"><i class="far fa-heart mr-1"></i> 45</button>
+                            <button class="hover:text-gray-600"><i class="far fa-comment mr-1"></i> 8</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="h-px bg-gray-50"></div>
+
+                <div class="comment-item group-B flex gap-3 fade-in">
+                    <div class="flex-shrink-0">
+                        <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Jack" class="w-9 h-9 rounded-full bg-gray-100 border border-gray-100">
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[13px] font-bold text-gray-900">최*민 님</span>
+                            <span class="text-[10px] text-gray-400">1시간 전</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-orange-50 text-brand-orange border border-orange-100">
+                                <i class="fas fa-check mr-1"></i> 도심 아파트 선택
+                            </span>
+                        </div>
+                        <p class="text-[14px] text-gray-700 leading-relaxed">
+                            자식들도 오기 편해야 자주 보죠. 시골 들어가면 고립됩니다. 친구들도 만나고 문화생활 하려면 도시가 답이에요.
+                        </p>
+                        <div class="flex gap-4 mt-2 text-gray-400 text-[12px]">
+                            <button class="hover:text-gray-600"><i class="far fa-heart mr-1"></i> 23</button>
+                            <button class="hover:text-gray-600"><i class="far fa-comment mr-1"></i> 5</button>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+        <div class="fixed bottom-0 w-full max-w-[480px] bg-white border-t border-gray-100 p-4 pb-8 z-30 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+            <button class="w-full bg-gray-900 text-white font-bold text-[16px] py-4 rounded-xl shadow-lg hover:bg-gray-800 transition-transform active:scale-[0.98] flex items-center justify-center gap-2">
+                <i class="fas fa-pen"></i> 투표하고 의견 남기기
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        function filterComments(type, btn) {
+            // 1. Button Styles
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('filter-active', 'bg-gray-900', 'text-white', 'border-gray-900');
+                b.classList.add('bg-white', 'text-gray-500', 'border-gray-200');
+            });
+            
+            btn.classList.remove('bg-white', 'text-gray-500', 'border-gray-200');
+            btn.classList.add('filter-active');
+
+            // 2. List Filtering
+            const items = document.querySelectorAll('.comment-item');
+            
+            items.forEach(item => {
+                if (type === 'all') {
+                    item.style.display = 'flex';
+                } else {
+                    if (item.classList.contains(`group-${type}`)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
